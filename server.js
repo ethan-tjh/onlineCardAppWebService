@@ -37,6 +37,33 @@ app.post('/addcards', async (req, res) => {
         res.status(201).json({message: 'Card ' + card_name + ' added successfully'});
     } catch (err) {
         console.error(err);
-        res.status(500).json({message: 'Server error - could not add card ' + card_name});
+        res.status(500).json({message: 'Server error - could not add card'});
     }
 });
+app.post('/updatecards/:id', async (req, res) => {
+    const {id} = req.params;
+    const {card_name, card_pic} = req.body;
+    try {
+        let connection = await mysql.createConnection(dbConfig);
+        const [rows] = await connection.execute('SELECT card_name FROM cards WHERE id = ?', [id]);
+        const displayName = card_name || rows[0].card_name;
+        await connection.execute('UPDATE cards SET card_name = ?, card_pic = ? WHERE id = ?', [card_name, card_pic]);
+        res.status(201).json({message: 'Card ' + displayName + ' has been updated successfully'});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({message: 'Server error - could not update card'});
+    }
+})
+app.post('/deletecards/:id', async (req, res) => {
+    const {id} = req.params;
+    try {
+        let connection = await mysql.createConnection(dbConfig);
+        const [rows] = await connection.execute('SELECT card_name FROM cards WHERE id = ?', [id]);
+        const displayName = rows[0].card_name;
+        await connection.execute('DELETE FROM cards WHERE id = ?', [id]);
+        res.status(200).json({message: 'Card ' + displayName + ' has been deleted'});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({message: 'Server error - could not delete card'});
+    }
+})
