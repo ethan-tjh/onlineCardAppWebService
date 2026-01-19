@@ -1,5 +1,6 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
+const cors = require("cors");
 require('dotenv').config();
 const port = 3000;
 const dbConfig = {
@@ -13,6 +14,23 @@ const dbConfig = {
     queueLimit: 0,
 };
 const app = express();
+const allowedOrigins = [
+    "http://localhost:3000",
+];
+app.use(
+    cors({
+        origin: function (origin, callback) {
+            if (!origin) return callback(null, true);
+            if (allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+            return callback(new Error("Not allowed by CORS"));
+        },
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        credentials: false,
+    })
+);
 app.use(express.json());
 app.listen(port, () => {
     console.log('Server running on port', port);
