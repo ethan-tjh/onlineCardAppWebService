@@ -58,7 +58,7 @@ app.post('/addcards', async (req, res) => {
         res.status(500).json({message: 'Server error - could not add card'});
     }
 });
-app.post('/updatecards/:id', async (req, res) => {
+app.put('/updatecards/:id', async (req, res) => {
     const {id} = req.params;
     const {card_name, card_pic} = req.body;
     try {
@@ -72,7 +72,7 @@ app.post('/updatecards/:id', async (req, res) => {
         res.status(500).json({message: 'Server error - could not update card'});
     }
 })
-app.post('/deletecards/:id', async (req, res) => {
+app.delete('/deletecards/:id', async (req, res) => {
     const {id} = req.params;
     try {
         let connection = await mysql.createConnection(dbConfig);
