@@ -65,7 +65,7 @@ app.put('/updatecards/:id', async (req, res) => {
         let connection = await mysql.createConnection(dbConfig);
         const [rows] = await connection.execute('SELECT card_name FROM cards WHERE id = ?', [id]);
         const displayName = card_name || rows[0].card_name;
-        await connection.execute('UPDATE cards SET card_name=?, card_pic=? WHERE id = ?', [card_name, card_pic]);
+        await connection.execute('UPDATE cards SET card_name=?, card_pic=? WHERE id = ?', [card_name, card_pic, id]);
         res.status(201).json({message: 'Card ' + displayName + ' has been updated successfully'});
     } catch (err) {
         console.error(err);
