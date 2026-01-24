@@ -16,7 +16,7 @@ const dbConfig = {
 const app = express();
 const allowedOrigins = [
     "http://localhost:3000",
-    "https://card-app-starter-rvxg.onrender.com/"
+    "https://card-app-starter-rvxg.onrender.com"
 ];
 app.use(
     cors({
